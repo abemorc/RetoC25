@@ -6,3 +6,8 @@
 .httr-oauth
 .DS_Store
 .quarto
+RawData/
+Data/
+Learning/
+.RDataTmp
+.RDataTmp1

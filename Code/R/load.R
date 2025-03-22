@@ -1,6 +1,6 @@
-
 library(googledrive)
-# library(tidyverse)
+library(vroom)
+
 
 
 drive_deauth()
@@ -17,10 +17,6 @@ if (!file.exists(destino)) {
 } 
 
 
-dfRaw <- vroom::vroom(file = destino, delim = ',')
+dfRaw <- vroom(file = destino, delim = ',')
 
 str(dfRaw)
-
-# cargar funciones auxiliares
-source('Code/R/utils.R')
-
