@@ -27,10 +27,10 @@
 library(tidyverse)
 library(hms)
 
-dfSample <- dfRaw |> 
-  sample_n(500000)
-
-dfSample
+# dfSample <- dfRaw |> 
+#   sample_n(500000)
+# 
+# dfSample
 
 
 
@@ -60,8 +60,12 @@ dfCoppel <- dfRaw |>
 
 
 
+
 dfCoppel |> glimpse()
-dfCoppel |> View()
+
+dfCoppel |> 
+  slice_sample(n = 1000) |> 
+  View()
 
 
 
@@ -69,7 +73,7 @@ dfCoppel |> View()
 # en un segmento, pero termina en otro
 dfCoppel |> 
   filter(Segmento != SEGMENTO_FISICO) 
-# son 1,229,103, talvez sea necesario estudiar estos datos por aparte
+# son 1,229,113, talvez sea necesario estudiar estos datos por aparte
 # PREGUNTAR
 
 
@@ -153,7 +157,7 @@ dfRaw |>
   filter(Fecha == '2023-01-04') |> 
   count(estado)
   View()
-
+# no todos los dias tenemos registros de todas las tienas
 
 
 dfClean |> 
@@ -169,6 +173,8 @@ dfRaw |>
 dfClean |> 
   head(n = 1000) |> 
   View()
+
+
 
 dfCoppel |> 
   arrange(desc( hora_salida_sexagesimal)) |> 
@@ -189,29 +195,35 @@ dfRaw |>
   geom_histogram()
 
 # parece que la afluencia de clientes es menor en los primeros dias del 
-# year, aumentando alrededor de marzo
+# a;no, aumentando alrededor de marzo
 
 
 
 
-dfClean <- dfClean |> 
+dfAgrupado <- dfClean |> 
   nest(.by = c(estado, tienda, Fecha)) 
 
 
-View(dfClean)
+View(dfAgrupado)
 
 # promedio de atencion al cliente global
-dfClean2 |> 
+dfClean |> 
   summarise(promedio_servicio = mean(tiempo_servicio_sexagesimal))
 # 197 segundos
 
 
 
+
+
+
+
 # -------------------------------------------------------------------------
 
-# Otra particion de datos
+# Otra forma de agrupar los datos
+# Considero que esta es la mejor forma, sin embargo, nos quedamos con
+# muy pocas observaciones en cada caso, y no si si esto influya 
 
-
+# save(dfCoppel, file = 'dfCoppel.RData')
 
 dfClean2 <- dfCoppel |> 
   # slice_sample(prop = 0.1) |>
@@ -230,7 +242,13 @@ dfClean2 <- dfClean2 |>
   ungroup() |>
   mutate(interarribo_sexagesimal = as_sexagesimal(interarribo),
          tiempo_espera_sexagesimal = as_sexagesimal(tiempo_espera),
-         tiempo_servicio_sexagesimal = as_sexagesimal(tiempo_servicio))
+         tiempo_servicio_sexagesimal = as_sexagesimal(tiempo_servicio)) |> 
+  relocate(estado, tienda, Fecha, dia_semana, dias_finde, Segmento, SEGMENTO_FISICO, 
+           hora_llegada_sexagesimal, interarribo_sexagesimal,
+           hora_llamado_sexagesimal, tiempo_espera_sexagesimal,
+           hora_salida_sexagesimal, tiempo_servicio_sexagesimal,
+           caja, status, hora_llegada, 
+           hora_llamado, hora_salida, Id)
 
 
 
@@ -238,11 +256,12 @@ glimpse(dfClean2)
 
 View(dfClean2 |> head(10000))
 
-dfAgrupado <- dfClean2 |> 
+dfAgrupado2 <- dfClean2 |> 
   nest(.by = c(estado, tienda, Fecha, SEGMENTO_FISICO)) 
 
 
-dfAgrupado |> 
+dfAgrupado2 |> 
   View()
+
 
 

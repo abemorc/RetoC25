@@ -17,7 +17,7 @@ glimpse(dfRaw)
 dfRaw |> 
   summarise(across(everything(), \(x)sum(is.na(x)))) |> 
   View()
-# veo que o hay ningun NA, y aparentemente la data esta limpia, es decir,
+# veo que no hay ningun NA, y aparentemente la data esta limpia, es decir,
 # no hay errores de captura o correcciones neesarias
 
 
@@ -44,7 +44,8 @@ dfRaw |>
 # ver los diferentes valores de cada variable
 map(.x = dfRaw,.f = \(x) x |> as_tibble() |> distinct())
 
-# vemos que hay 50 tiendas, 77 cajas aunque esas cajas en realidad no son unicas
+# vemos que hay 50 tiendas, 77 cajas aunque esas cajas en realidad no 
+# son unicas
 # 3 segmentos
 # tenemos informacion de 396 dias
 
