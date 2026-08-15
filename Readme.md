@@ -28,8 +28,13 @@
 │
 ├───RawData         - datos proporcionados por organizadores
 |
-|        data_sst_reto_coppel.csv
+|       data_sst_reto_coppel.csv
 |
+├───Reporte         - notebook final y presentacion
+|
+|        ReportFinal.nb.html
+|        RETO COPPEL MMC Warrios.pdf
+
 
 
 ```
